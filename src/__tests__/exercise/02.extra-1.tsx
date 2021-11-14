@@ -2,6 +2,7 @@
 // http://localhost:3000/counter
 
 import {render, fireEvent} from '@testing-library/react';
+import '@testing-library/dom';
 import Counter from '../../components/counter';
 
 test('counter increments and decrements when the buttons are clicked', () => {
@@ -37,7 +38,7 @@ test('counter increments and decrements when the buttons are clicked', () => {
   });
   increment.dispatchEvent(incrementClickEvent); */
   fireEvent.click(increment);
-  expect(message.textContent).toBe('Current count: 1');
+  expect(message).toHaveTextContent('Current count: 1');
 
   /* const decrementClickEvent = new MouseEvent('click', {
     bubbles: true,
@@ -46,5 +47,5 @@ test('counter increments and decrements when the buttons are clicked', () => {
   });
   decrement.dispatchEvent(decrementClickEvent); */
   fireEvent.click(decrement);
-  expect(message.textContent).toBe('Current count: 0');
+  expect(message).toHaveTextContent('Current count: 0');
 });

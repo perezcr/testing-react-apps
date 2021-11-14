@@ -15,7 +15,6 @@ test('counter increments and decrements when the buttons are clicked', () => {
   document.body.append(div);
 
   ReactDOM.render(<Counter />, div);
-  console.log(document.body.innerHTML);
 
   // TypeScript doesn't trust the DOM very much, so you'll need to verify
   // things are what they should be to make TypeScript happy here.
@@ -30,12 +29,22 @@ test('counter increments and decrements when the buttons are clicked', () => {
   if (!message) {
     throw new Error(`couldn't find message div`);
   }
-  console.log(message.textContent);
+
   expect(message.textContent).toBe('Current count: 0');
 
-  increment.click();
+  const incrementClickEvent = new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+  });
+  increment.dispatchEvent(incrementClickEvent);
   expect(message.textContent).toBe('Current count: 1');
 
-  decrement.click();
+  const decrementClickEvent = new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+    button: 0,
+  });
+  decrement.dispatchEvent(decrementClickEvent);
   expect(message.textContent).toBe('Current count: 0');
 });
