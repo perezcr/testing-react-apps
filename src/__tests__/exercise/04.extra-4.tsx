@@ -1,20 +1,27 @@
 // form testing
-// http://localhost:3000/login
 
 import {render, screen} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import {build, fake} from '@jackfranklin/test-data-bot';
 import Login from '../../components/login';
+import type {LoginFormValues} from '../../components/login';
+
+const buildLoginForm = build<LoginFormValues>({
+  fields: {
+    username: fake(f => f.internet.userName()),
+    password: fake(f => f.internet.password()),
+  },
+});
 
 test('submitting the form calls onSubmit with username and password', () => {
-  let submittedData: unknown;
-  const handleSubmit = (data: unknown) => (submittedData = data);
+  const handleSubmit = jest.fn();
   render(<Login onSubmit={handleSubmit} />);
-  const username = 'chucknorris';
-  const password = 'i need no password';
+  const {username, password} = buildLoginForm();
 
   userEvent.type(screen.getByLabelText(/username/i), username);
   userEvent.type(screen.getByLabelText(/password/i), password);
   userEvent.click(screen.getByRole('button', {name: /submit/i}));
 
-  expect(submittedData).toEqual({username, password});
+  expect(handleSubmit).toHaveBeenCalledWith({username, password});
+  expect(handleSubmit).toHaveBeenCalledTimes(1);
 });
